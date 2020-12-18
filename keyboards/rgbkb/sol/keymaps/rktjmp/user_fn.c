@@ -16,7 +16,7 @@ const rgblight_segment_t* const PROGMEM my_rgb_layers[] = RGBLIGHT_LAYERS_LIST(
 
 void keyboard_post_init_user(void) {
   rgblight_disable_noeeprom();
-  default_layer_set(1UL << 1); // default to qwerty layer
+  default_layer_set(1UL << 2); // default to colemak layer
       rgblight_layers = my_rgb_layers;
 }
 
