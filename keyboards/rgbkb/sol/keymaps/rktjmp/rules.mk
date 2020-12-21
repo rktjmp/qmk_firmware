@@ -13,7 +13,5 @@
 #RGB_MATRIX_ENABLE = yes
 #RGB_MATRIX_KEYPRESSES = yes
 
-SRC += user_fn.c
-
 # Do not edit past here
 include keyboards/$(KEYBOARD)/post_rules.mk
