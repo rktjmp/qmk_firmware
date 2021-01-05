@@ -24,6 +24,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define IGNORE_MOD_TAP_INTERRUPT
 #define RGBLIGHT_LAYERS_OVERRIDE_RGB_OFF
 
+#define PERMISSIVE_HOLD
+#define RETRO_TAPPING
+
 
 // place overrides here
 
