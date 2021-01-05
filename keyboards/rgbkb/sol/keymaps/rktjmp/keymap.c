@@ -9,32 +9,45 @@
 // are prefixed as such, so make some sneaky maps to fix that.
 #define KC_RESET RESET
 #define KC_MO MO
+#define KC_OSL OSL
 #define KC_DF DF
+#define KC_MT MT
+#define KC_TG TG
 #define KC_RGB_TOG RGB_TOG
+
+#define KC_VOL_M KC_AUDIO_MUTE
+#define KC_VOL_D KC_AUDIO_VOL_DOWN
+#define KC_VOL_U KC_AUDIO_VOL_UP
 
 enum layer_number {
   _BSE = 0,
   _QWR,
   _CLM,
   _SYM,
-  _NAV ,
+  _NAV,
   _NUM,
+  _SYS,
+  _GQW, // gaming qwerty, with no special holds, return goes to GCL
+  _GCL, // gaming colemak, with esc and return going to GQW
 };
+
+#define KC_SPC_SYM LT(_SYM, KC_SPC)
+#define KC_ENT_NAV LT(_NAV, KC_ENT)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_BSE] = LAYOUT_kc(\
  //┌────────┬────────┬────────┬────────┬────────┬────────┬────────┐┌────────┬────────┬────────┬────────┬────────┬────────┬────────┐
-     GESC   , 1      , 2      , 3      , 4      , 5      , NO     ,  NO     , 6      , 7      , 8      , 9      , 0      , NO     ,\
+     GESC   , 1      , 2      , 3      , 4      , 5      ,MO(_SYS),  NO     , 6      , 7      , 8      , 9      , 0      , NO     ,\
  //├────────┼────────┼────────┼────────┼────────┼────────┼────────┤├────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-     TAB    , NO     , NO     , NO     , NO     , NO     , NO     ,  NO     , NO     , NO     , NO     , NO     , NO     , NO     ,\
+     TAB    , NO     , NO     , NO     , NO     , NO     , NO     ,  NO     , NO     , NO     , NO     , NO     , NO     , DEL    ,\
  //├────────┼────────┼────────┼────────┼────────┼────────┼────────┤├────────┼────────┼────────┼────────┼────────┼────────┼────────┤
      LCTL   , NO     , NO     , NO     , NO     , NO     , NO     ,  NO     , NO     , NO     , NO     , NO     , NO     , BSPC   ,\
  //├────────┼────────┼────────┼────────┼────────┼────────┼────────┤├────────┼────────┼────────┼────────┼────────┼────────┼────────┤
      LSFT   , NO     , NO     , NO     , NO     , NO     , NO     ,  NO     , NO     , NO     , NO     , NO     , NO     , NO     ,\
  //├────────┼────────┼────────┼────────┼────────┼────────┼────────┤├────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-     MO(5)  , LGUI   , LALT   , LGUI   ,MO(_SYM), SPC    , DEL    ,  SPC    , ENT    ,MO(_NAV), NO     , NO     , NO     , NO     ,\
+     NO     , MEH    , LGUI   , LALT   ,OSL(_SYM),SPC_SYM,MO(_NUM),  NO     , ENT_NAV,MO(_NAV), NO     , NO     , NO     , NO     ,\
  //└────────┴────────┴────────┴────────┴────────┤        │        ││        │        ├────────┴────────┴────────┴────────┴────────┘
-                                                  SPC    , DEL    ,  SPC    , ENT    \
+                                                  SPC_SYM,MO(_NUM),  NO     , ENT_NAV\
  //                                             └────────┴────────┘└────────┴────────┘
   ),
   [_QWR] = LAYOUT_kc(\
@@ -54,13 +67,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
   [_CLM] = LAYOUT_kc(\
  //┌────────┬────────┬────────┬────────┬────────┬────────┬────────┐┌────────┬────────┬────────┬────────┬────────┬────────┬────────┐
- //├────────┼────────┼────────┼────────┼────────┼────────┼────────┤├────────┼────────┼────────┼────────┼────────┼────────┼────────┤
- //└────────┴────────┴────────┴────────┴────────┤        │        ││        │        ├────────┴────────┴────────┴────────┴────────┘
- //                                             └────────┴────────┘└────────┴────────┘
- //┌────────┬────────┬────────┬────────┬────────┬────────┬────────┐┌────────┬────────┬────────┬────────┬────────┬────────┬────────┐
      TRNS   , TRNS   , TRNS   , TRNS   , TRNS   , TRNS   , TRNS   ,  TRNS   , TRNS   , TRNS   , TRNS   , TRNS   , TRNS   , TRNS   ,\
  //├────────┼────────┼────────┼────────┼────────┼────────┼────────┤├────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-     TRNS   , Q      , W      , F      , P      , B      , TRNS   ,  TRNS   , J      , L      , U      , Y      , SCLN   , TRNS   ,\
+     TRNS   , Q      , W      , F      , P      , B      , TRNS   ,  TRNS   , J      , L      , U      , Y      , QUOT   , TRNS   ,\
  //├────────┼────────┼────────┼────────┼────────┼────────┼────────┤├────────┼────────┼────────┼────────┼────────┼────────┼────────┤
      TRNS   , A      , R      , S      , T      , G      , TRNS   ,  TRNS   , M      , N      , E      , I      , O      , TRNS   ,\
  //├────────┼────────┼────────┼────────┼────────┼────────┼────────┤├────────┼────────┼────────┼────────┼────────┼────────┼────────┤
@@ -73,63 +82,109 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
   [_SYM] = LAYOUT_kc(\
  //┌────────┬────────┬────────┬────────┬────────┬────────┬────────┐┌────────┬────────┬────────┬────────┬────────┬────────┬────────┐
-     TILD   , EXLM   , AT     , HASH   , DLR    , PERC   , NO     ,  NO     , CIRC   , AMPR   , ASTR   , LPRN   , RPRN   , NO     ,\
+     NO     , NO     , NO     , NO     , NO     , NO     , NO     ,  NO     , NO     , NO     , NO     , NO     , BSLS   , NO     ,\
  //├────────┼────────┼────────┼────────┼────────┼────────┼────────┤├────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-     NO     , NO     , NO     , NO     , NO     , NO     , NO     ,  NO     , LCBR   , RCBR   , LBRC   , RBRC   , BSLS   , NO     ,\
+     NO     , EXLM   , AT     , HASH   , DLR    , PERC   , NO     ,  NO     , CIRC   , AMPR   , ASTR   , SCLN   , GRV    , TRNS   ,\
  //├────────┼────────┼────────┼────────┼────────┼────────┼────────┤├────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-     TRNS   , TILD   , MINS   , PLUS   , EQL    , NO     , NO     , DF(_CLM), NO     , LPRN   , RPRN   , DQUO   , QUOT   , TRNS   ,\
+     TRNS   , TILD   , MINS   , PLUS   , EQL    , NO     , NO     ,  NO     , NO     , UNDS   , NO     , PIPE   , COLN   , TRNS   ,\
  //├────────┼────────┼────────┼────────┼────────┼────────┼────────┤├────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-     TRNS   , NO     , NO     , NO     , NO     , NO     , RESET  , DF(_QWR), NO     , UNDS   , LT     , GT     , PIPE   , RGB_TOG,\
+     TRNS   , LT     , LCBR   , LBRC   , LPRN   , NO     , NO     ,  NO     , BSLS   , RPRN   , RBRC   , RCBR   , GT     , NO     ,\
  //├────────┼────────┼────────┼────────┼────────┼────────┼────────┤├────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-     NO     , NO     , TRNS   , NO     , TRNS   , TRNS   , TRNS   ,  TRNS   , TRNS   , TRNS   , NO     , NO     , NO     , RGB_MOD,\
+     NO     , TRNS   , TRNS   , TRNS   , TRNS   , TRNS   , TRNS   ,  TRNS   , TRNS   , TRNS   , NO     , NO     , NO     , NO     ,\
  //└────────┴────────┴────────┴────────┴────────┤        │        ││        │        ├────────┴────────┴────────┴────────┴────────┘
-                                                  TRNS   , TRNS   , TRNS    , TRNS   \
+                                                  TRNS   , TRNS   ,  TRNS   , TRNS   \
  //                                             └────────┴────────┘└────────┴────────┘
   ),
   [_NAV] = LAYOUT_kc(\
  //┌────────┬────────┬────────┬────────┬────────┬────────┬────────┐┌────────┬────────┬────────┬────────┬────────┬────────┬────────┐
-     NO     , NO     , NO     , NO     , NO     , NO     , NO     ,  NO     , NO     , NO     , NO     , NO     , NO     , NO     ,\
+     NO     , NO     , NO     , NO     , NO     , NO     , NO     ,  NO     , NO     , PSCR   , SLCK   , PAUS   , NO     , NO     ,\
  //├────────┼────────┼────────┼────────┼────────┼────────┼────────┤├────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-     NO     , NO     , NO     , NO     , NO     , NO     , NO     ,  NO     , NO     , NO     , NO     , NO     , NO     , NO     ,\
+     NO     , NO     , NO     , NO     , NO     , NO     , NO     ,  NO     , NO     , INS    , HOME   , PGUP   , NO     , TRNS   ,\
  //├────────┼────────┼────────┼────────┼────────┼────────┼────────┤├────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-     NO     , NO     , NO     , NO     , NO     , NO     , NO     ,  NO     , LEFT   , DOWN   , UP     , RGHT   , NO     , NO     ,\
+     TRNS   , NO     , NO     , NO     , NO     , NO     , NO     ,  NO     , LEFT   , DOWN   , UP     , RGHT   , NO     , TRNS   ,\
  //├────────┼────────┼────────┼────────┼────────┼────────┼────────┤├────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-     NO     , NO     , NO     , NO     , NO     , NO     , NO     ,  NO     , NO     , NO     , NO     , NO     , NO     , NO     ,\
+     TRNS   , NO     , NO     , NO     , NO     , NO     , NO     ,  NO     , NO     , DEL    , END    , PGDN   , NO     , NO     ,\
  //├────────┼────────┼────────┼────────┼────────┼────────┼────────┤├────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-     NO     , NO     , NO     , NO     , NO     , NO     , NO     ,  NO     , NO     , TRNS   , NO     , NO     , NO     , NO     ,\
+     NO     , TRNS   , TRNS   , NO     , NO     , NO     , NO     ,  NO     , TRNS   , TRNS   , NO     , NO     , NO     , NO     ,\
  //└────────┴────────┴────────┴────────┴────────┤        │        ││        │        ├────────┴────────┴────────┴────────┴────────┘
-                                                  NO     , NO     ,  NO     , NO     \
+                                                  NO     , NO     ,  NO     , TRNS   \
  //                                             └────────┴────────┘└────────┴────────┘
   ),
   [_NUM] = LAYOUT_kc(\
  //┌────────┬────────┬────────┬────────┬────────┬────────┬────────┐┌────────┬────────┬────────┬────────┬────────┬────────┬────────┐
-     NO     , F1     , F2     , F3     , NO     , NO     , NO     ,  NO     , PAST   , P7     , P8     , P9     , PMNS   , NO     ,\
+     NO     , NO     , NO     , NO     , NO     , NO     , NO     ,  NO     , NO     , NO     , NO     , NO     , NO     , NO     ,\
  //├────────┼────────┼────────┼────────┼────────┼────────┼────────┤├────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-     NO     , F4     , F5     , F6     , NO     , NO     , NO     ,  NO     , PSLS   , P4     , P5     , P6     , PPLS   , NO     ,\
+     NO     , F7     , F8     , F9     , F12    , NO     , NO     ,  NO     , NO     , 7      , 8      , 9      , NO     , TRNS   ,\
  //├────────┼────────┼────────┼────────┼────────┼────────┼────────┤├────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-     NO     , F7     , F8     , F9     , NO     , NO     , NO     ,  NO     , NO     , P1     , P2     , P3     , NO     , NO     ,\
+     TRNS   , F4     , F5     , F6     , F11    , NO     , NO     ,  NO     , NO     , 4      , 5      , 6      , 0      , TRNS   ,\
  //├────────┼────────┼────────┼────────┼────────┼────────┼────────┤├────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-     NO     , F10    , F11    , F12    , NO     , NO     , NO     ,  NO     , NO     , P0     , PDOT   , PENT   , PEQL   , NO     ,\
+     TRNS   , F1     , F2     , F3     , F10    , NO     , NO     ,  NO     , NO     , 1      , 2      , 3      , NO     , NO     ,\
  //├────────┼────────┼────────┼────────┼────────┼────────┼────────┤├────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-     TRNS   , NO     , NO     , NO     , NO     , NO     , NO     ,  NO     , NO     , NO     , NO     , NO     , NO     , NO     ,\
+     NO     , TRNS   , TRNS   , NO     , NO     , NO     , TRNS   ,  NO     , TRNS   , NO     , NO     , DOT    , NO     , NO     ,\
+ //└────────┴────────┴────────┴────────┴────────┤        │        ││        │        ├────────┴────────┴────────┴────────┴────────┘
+                                                  NO     , TRNS   ,  NO     , TRNS   \
+ //                                             └────────┴────────┘└────────┴────────┘
+  ),
+  [_SYS] = LAYOUT_kc(\
+ //┌────────┬────────┬────────┬────────┬────────┬────────┬────────┐┌────────┬────────┬────────┬────────┬────────┬────────┬────────┐
+     RESET  , NO     , NO     , NO     , NO     , NO     , TRNS   , TG(_GQW), NO     , NO     , NO     , NO     , NO     , NO     ,\
+ //├────────┼────────┼────────┼────────┼────────┼────────┼────────┤├────────┼────────┼────────┼────────┼────────┼────────┼────────┤
+     NO     , NO     , NO     , NO     , NO     , NO     , NO     ,  NO     , NO     , VOL_U  , NO     , NO     , NO     , NO     ,\
+ //├────────┼────────┼────────┼────────┼────────┼────────┼────────┤├────────┼────────┼────────┼────────┼────────┼────────┼────────┤
+     NO     , NO     , NO     , NO     , NO     , NO     ,DF(_CLM),  NO     , NO     , VOL_D  , NO     , NO     , NO     , NO     ,\
+ //├────────┼────────┼────────┼────────┼────────┼────────┼────────┤├────────┼────────┼────────┼────────┼────────┼────────┼────────┤
+     NO     , NO     , NO     , NO     , NO     , NO     ,DF(_QWR),  NO     , NO     , VOL_M  , NO     , NO     , NO     , RGB_TOG,\
+ //├────────┼────────┼────────┼────────┼────────┼────────┼────────┤├────────┼────────┼────────┼────────┼────────┼────────┼────────┤
+     NO     , NO     , NO     , NO     , NO     , NO     , NO     ,  NO     , NO     , NO     , NO     , NO     , NO     , RGB_MOD,\
  //└────────┴────────┴────────┴────────┴────────┤        │        ││        │        ├────────┴────────┴────────┴────────┴────────┘
                                                   NO     , NO     ,  NO     , NO     \
  //                                             └────────┴────────┘└────────┴────────┘
+ ),
+ [_GQW] = LAYOUT_kc(\
+ //┌────────┬────────┬────────┬────────┬────────┬────────┬────────┐┌────────┬────────┬────────┬────────┬────────┬────────┬────────┐
+     GESC   , 1      , 2      , 3      , 4      , 5      , NO     ,TG(_GQW) , 6      , 7      , 8      , 9      , 0      , NO     ,\
+ //├────────┼────────┼────────┼────────┼────────┼────────┼────────┤├────────┼────────┼────────┼────────┼────────┼────────┼────────┤
+     TAB    , Q      , W      , E      , R      , T      , F5     ,  F6     , Y      , U      , I      , O      , P      , DEL    ,\
+ //├────────┼────────┼────────┼────────┼────────┼────────┼────────┤├────────┼────────┼────────┼────────┼────────┼────────┼────────┤
+     LCTL   , A      , S      , D      , F      , G      , F4     ,  F10    , H      , J      , K      , L      , SCLN   , BSPC   ,\
+ //├────────┼────────┼────────┼────────┼────────┼────────┼────────┤├────────┼────────┼────────┼────────┼────────┼────────┼────────┤
+     LSFT   , Z      , X      , C      , V      , B      , F1     ,  F2     , N      , M      , COMM   , DOT    , SLSH   , NO     ,\
+ //├────────┼────────┼────────┼────────┼────────┼────────┼────────┤├────────┼────────┼────────┼────────┼────────┼────────┼────────┤
+     GRV    , BSLS   , LGUI   , LALT   , NO     , SPC    , MINS   ,  EQL    , ENT    , NO     , NO     , NO     , NO     , NO     ,\
+ //└────────┴────────┴────────┴────────┴────────┤        │        ││        │        ├────────┴────────┴────────┴────────┴────────┘
+                                                  SPC    , MINS   ,  EQL    , ENT    \
+ //                                             └────────┴────────┘└────────┴────────┘
  )
 };
-//
+/*
+ [] = LAYOUT_kc(\
  //┌────────┬────────┬────────┬────────┬────────┬────────┬────────┐┌────────┬────────┬────────┬────────┬────────┬────────┬────────┐
+     NO     , NO     , NO     , NO     , NO     , NO     , NO     ,  NO     , NO     , NO     , NO     , NO     , NO     , NO     ,\
  //├────────┼────────┼────────┼────────┼────────┼────────┼────────┤├────────┼────────┼────────┼────────┼────────┼────────┼────────┤
+     NO     , NO     , NO     , NO     , NO     , NO     , NO     ,  NO     , NO     , NO     , NO     , NO     , NO     , NO     ,\
+ //├────────┼────────┼────────┼────────┼────────┼────────┼────────┤├────────┼────────┼────────┼────────┼────────┼────────┼────────┤
+     NO     , NO     , NO     , NO     , NO     , NO     , NO     ,  NO     , NO     , NO     , NO     , NO     , NO     , NO     ,\
+ //├────────┼────────┼────────┼────────┼────────┼────────┼────────┤├────────┼────────┼────────┼────────┼────────┼────────┼────────┤
+     NO     , NO     , NO     , NO     , NO     , NO     , NO     ,  NO     , NO     , NO     , NO     , NO     , NO     , NO     ,\
+ //├────────┼────────┼────────┼────────┼────────┼────────┼────────┤├────────┼────────┼────────┼────────┼────────┼────────┼────────┤
+     NO     , NO     , NO     , NO     , NO     , NO     , NO     ,  NO     , NO     , NO     , NO     , NO     , NO     , NO     ,\
  //└────────┴────────┴────────┴────────┴────────┤        │        ││        │        ├────────┴────────┴────────┴────────┴────────┘
+                                                  NO     , NO     ,  NO     , NO     \
  //                                             └────────┴────────┘└────────┴────────┘
+ ),
+*/
 
 // Light LEDs 11 & 12 in purple when keyboard layer 2 is active
-const rgblight_segment_t PROGMEM mods_layer[] = RGBLIGHT_LAYER_SEGMENTS(
-  {0, 6, HSV_PURPLE}
-);
+const rgblight_segment_t PROGMEM sym_layer[] = RGBLIGHT_LAYER_SEGMENTS( {0, 6, HSV_PURPLE});
+const rgblight_segment_t PROGMEM num_layer[] = RGBLIGHT_LAYER_SEGMENTS( {0, 6, HSV_GREEN});
+const rgblight_segment_t PROGMEM nav_layer[] = RGBLIGHT_LAYER_SEGMENTS( {0, 6, HSV_AZURE});
+const rgblight_segment_t PROGMEM sys_layer[] = RGBLIGHT_LAYER_SEGMENTS( {0, 36, HSV_RED});
 // Now define the array of layers. Later layers take precedence
 const rgblight_segment_t* const PROGMEM my_rgb_layers[] = RGBLIGHT_LAYERS_LIST(
-  mods_layer     // Overrides other layers
+    sym_layer,
+    num_layer,
+    nav_layer,
+    sys_layer
 );
 
 void keyboard_post_init_user(void) {
@@ -140,7 +195,10 @@ void keyboard_post_init_user(void) {
 
 layer_state_t layer_state_set_user(layer_state_t state) {
   // Both layers will light up if both kb layers are active
-  rgblight_set_layer_state(0, layer_state_cmp(state, 3));
+  rgblight_set_layer_state(0, layer_state_cmp(state, _SYM));
+  rgblight_set_layer_state(1, layer_state_cmp(state, _NUM));
+  rgblight_set_layer_state(2, layer_state_cmp(state, _NAV));
+  rgblight_set_layer_state(3, layer_state_cmp(state, _SYS));
   return state;
 }
 
@@ -162,11 +220,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   case RESET:
     // reset only if we hold for half a second
     if (record->event.pressed) {
-        reset_timer = timer_read();
+      reset_timer = timer_read();
     } else {
-        if (timer_elapsed(reset_timer) >= 500) {
-            reset_keyboard();
-        }
+      if (timer_elapsed(reset_timer) >= 500) {
+        reset_keyboard();
+      }
     }
     return false;
   }
