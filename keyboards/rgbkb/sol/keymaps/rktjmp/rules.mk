@@ -13,5 +13,7 @@
 #RGB_MATRIX_ENABLE = yes
 #RGB_MATRIX_KEYPRESSES = yes
 
+MOUSEKEY_ENABLE = yes
+
 # Do not edit past here
 include keyboards/$(KEYBOARD)/post_rules.mk
