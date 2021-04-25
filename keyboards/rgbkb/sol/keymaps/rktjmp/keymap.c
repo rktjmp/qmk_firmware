@@ -19,6 +19,10 @@
 #define KC_VOL_D KC_AUDIO_VOL_DOWN
 #define KC_VOL_U KC_AUDIO_VOL_UP
 
+// for linux x11 crash swap to term
+// #define KC_XREQ LALT(KC_PSCREEN | KC_R)
+// #define KC_XKIL LALT(KC_PSCREEN | KC_K)
+
 enum layer_number {
   _BSE = 0,
   _QWR,
