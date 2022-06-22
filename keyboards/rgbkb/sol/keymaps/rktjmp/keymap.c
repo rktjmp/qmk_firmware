@@ -24,7 +24,6 @@ enum layer_number {
   _NUL,
   _SYS,
   _GQW, // gaming qwerty, with no special holds, return goes to GCL
-  _GCL, // gaming colemak, with esc and return going to GQW
 };
 
 #define KC_SPC_SYM LT(_SYM, KC_SPC)
@@ -104,23 +103,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                                  KC_SPC, KC_MINS, /**/ KC_EQL,   KC_ENT \
  )
 };
-/*
- [] = LAYOUT(\
- //┌────────┬────────┬────────┬────────┬────────┬────────┬────────┐┌────────┬────────┬────────┬────────┬────────┬────────┬────────┐
-     NO     , NO     , NO     , NO     , NO     , NO     , NO     ,  NO     , NO     , NO     , NO     , NO     , NO     , NO     ,\
- //├────────┼────────┼────────┼────────┼────────┼────────┼────────┤├────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-     NO     , NO     , NO     , NO     , NO     , NO     , NO     ,  NO     , NO     , NO     , NO     , NO     , NO     , NO     ,\
- //├────────┼────────┼────────┼────────┼────────┼────────┼────────┤├────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-     NO     , NO     , NO     , NO     , NO     , NO     , NO     ,  NO     , NO     , NO     , NO     , NO     , NO     , NO     ,\
- //├────────┼────────┼────────┼────────┼────────┼────────┼────────┤├────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-     NO     , NO     , NO     , NO     , NO     , NO     , NO     ,  NO     , NO     , NO     , NO     , NO     , NO     , NO     ,\
- //├────────┼────────┼────────┼────────┼────────┼────────┼────────┤├────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-     NO     , NO     , NO     , NO     , NO     , NO     , NO     ,  NO     , NO     , NO     , NO     , NO     , NO     , NO     ,\
- //└────────┴────────┴────────┴────────┴────────┤        │        ││        │        ├────────┴────────┴────────┴────────┴────────┘
-                                                  NO     , NO     ,  NO     , NO     \
- //                                             └────────┴────────┘└────────┴────────┘
- ),
-*/
 
 // Light LEDs 11 & 12 in purple when keyboard layer 2 is active
 const rgblight_segment_t PROGMEM sym_layer[] = RGBLIGHT_LAYER_SEGMENTS( {0, 6, HSV_PURPLE});
