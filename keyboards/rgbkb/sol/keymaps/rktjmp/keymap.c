@@ -26,12 +26,16 @@ enum layer_number {
   _GQW, // gaming qwerty, with no special holds, return goes to GCL
 };
 
+enum custom_keycodes {
+  GAM_MAGIC_ENT = SAFE_RANGE
+};
+
 #define KC_SPC_SYM LT(_SYM, KC_SPC)
 #define KC_ENT_NAV LT(_NAV, KC_ENT)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_BSE] = LAYOUT(\
-    KC_GESC, KC_1,   KC_2,    KC_3,    KC_4,      KC_5,       MO(_SYS), /**/ KC_NO,  KC_6,       KC_7,     KC_8,  KC_9,  KC_0,  KC_NO,   \
+    KC_GESC, KC_1,   KC_2,    KC_3,    KC_4,      KC_5,       MO(_SYS), /**/ KC_NO,  KC_6,       KC_7,     KC_8,  KC_9,  KC_0,  GAM_MAGIC_ENT, \
      KC_TAB, KC_NO,  KC_NO,   KC_NO,   KC_NO,     KC_NO,      KC_NO,    /**/ KC_NO,  KC_NO,      KC_NO,    KC_NO, KC_NO, KC_NO, KC_DEL,  \
     KC_LCTL, KC_NO,  KC_NO,   KC_NO,   KC_NO,     KC_NO,      KC_NO,    /**/ KC_NO,  KC_NO,      KC_NO,    KC_NO, KC_NO, KC_NO, KC_BSPC, \
     KC_LSFT, KC_NO,  KC_NO,   KC_NO,   KC_NO,     KC_NO,      KC_NO,    /**/ KC_NO,  KC_NO,      KC_NO,    KC_NO, KC_NO, KC_NO, KC_NO,   \
@@ -95,7 +99,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                                  KC_NO,    KC_NO,    /**/ KC_NO, KC_NO \
  ),
  [_GQW] = LAYOUT(\
-     KC_GESC, KC_1,    KC_2,    KC_3,    KC_4,   KC_5,   KC_NO,   /**/ TG(_GQW), KC_6,   KC_7,  KC_8,    KC_9,   KC_0,    KC_NO,   \
+     KC_GESC, KC_1,    KC_2,    KC_3,    KC_4,   KC_5,   KC_NO,   /**/ TG(_GQW), KC_6,   KC_7,  KC_8,    KC_9,   KC_0,    KC_TRNS,   \
      KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,   KC_T,   KC_F5,   /**/ KC_F6,    KC_Y,   KC_U,  KC_I,    KC_O,   KC_P,    KC_DEL,  \
      KC_LCTL, KC_A,    KC_S,    KC_D,    KC_F,   KC_G,   KC_F4,   /**/ KC_F10,   KC_H,   KC_J,  KC_K,    KC_L,   KC_SCLN, KC_BSPC, \
      KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,   KC_B,   KC_F1,   /**/ KC_F2,    KC_N,   KC_M,  KC_COMM, KC_DOT, KC_SLSH, KC_NO,   \
@@ -134,7 +138,34 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   static uint16_t reset_timer;
+  static bool should_return_to_gqw = false;
   switch (keycode) {
+    case GAM_MAGIC_ENT:
+      /*
+       * If we are currently in gaming-qwerty, jump back to colemak, if we are
+       * in colemak, send enter, then jump back to gaming-qwerty.
+       *
+       * If we are in the magic mode, escape should cancel and send escape.
+       * */
+      if (record->event.pressed && IS_LAYER_ON(_GQW)) {
+        // mark that we should re-toggle _GQW on next press
+        should_return_to_gqw = true;
+        layer_off(_GQW);
+      }
+      else if (record->event.pressed && should_return_to_gqw) {
+        should_return_to_gqw = false;
+        layer_on(_GQW);
+        // send enter instead
+        tap_code(KC_ENT);
+      }
+      return false;
+    case KC_GESC:
+      if (record->event.pressed && should_return_to_gqw) {
+        should_return_to_gqw = false;
+        layer_on(_GQW);
+        // send escape instead
+        tap_code(KC_ESC);
+      }
 //    case RGBRST:
 //#if defined(RGBLIGHT_ENABLE)
 //        if (record->event.pressed) {
