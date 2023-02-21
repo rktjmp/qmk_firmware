@@ -108,18 +108,22 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  )
 };
 
-// Light LEDs 11 & 12 in purple when keyboard layer 2 is active
-const rgblight_segment_t PROGMEM sym_layer[] = RGBLIGHT_LAYER_SEGMENTS( {0, 6, HSV_PURPLE});
-const rgblight_segment_t PROGMEM num_layer[] = RGBLIGHT_LAYER_SEGMENTS( {0, 6, HSV_GREEN});
-const rgblight_segment_t PROGMEM nav_layer[] = RGBLIGHT_LAYER_SEGMENTS( {0, 6, HSV_AZURE});
-const rgblight_segment_t PROGMEM sys_layer[] = RGBLIGHT_LAYER_SEGMENTS( {0, 36, HSV_RED});
+const rgblight_segment_t PROGMEM sym_layer[] = RGBLIGHT_LAYER_SEGMENTS({0, 6, HSV_PURPLE});
+const rgblight_segment_t PROGMEM num_layer[] = RGBLIGHT_LAYER_SEGMENTS({0, 6, HSV_GREEN});
+const rgblight_segment_t PROGMEM nav_layer[] = RGBLIGHT_LAYER_SEGMENTS({0, 6, HSV_AZURE});
+const rgblight_segment_t PROGMEM sys_layer[] = RGBLIGHT_LAYER_SEGMENTS({0, 34, HSV_RED});
+const rgblight_segment_t PROGMEM magic_enter_layer[] = RGBLIGHT_LAYER_SEGMENTS({28, 34, HSV_BLUE});
+
 // Now define the array of layers. Later layers take precedence
 const rgblight_segment_t* const PROGMEM my_rgb_layers[] = RGBLIGHT_LAYERS_LIST(
     sym_layer,
     num_layer,
     nav_layer,
-    sys_layer
+    sys_layer,
+    magic_enter_layer
 );
+
+bool should_return_to_gqw = false;
 
 void keyboard_post_init_user(void) {
   rgblight_disable_noeeprom();
@@ -128,17 +132,16 @@ void keyboard_post_init_user(void) {
 }
 
 layer_state_t layer_state_set_user(layer_state_t state) {
-  // Both layers will light up if both kb layers are active
   rgblight_set_layer_state(0, layer_state_cmp(state, _SYM));
   rgblight_set_layer_state(1, layer_state_cmp(state, _NUM));
   rgblight_set_layer_state(2, layer_state_cmp(state, _NAV));
   rgblight_set_layer_state(3, layer_state_cmp(state, _SYS));
+  rgblight_set_layer_state(4, should_return_to_gqw);
   return state;
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   static uint16_t reset_timer;
-  static bool should_return_to_gqw = false;
   switch (keycode) {
     case GAM_MAGIC_ENT:
       /*
