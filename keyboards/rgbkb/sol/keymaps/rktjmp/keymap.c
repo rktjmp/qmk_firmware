@@ -163,9 +163,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       if (record->event.pressed && should_return_to_gqw) {
         should_return_to_gqw = false;
         layer_on(_GQW);
-        // send escape instead
-        tap_code(KC_ESC);
       }
+      // send escape still
+      return true;
 //    case RGBRST:
 //#if defined(RGBLIGHT_ENABLE)
 //        if (record->event.pressed) {
