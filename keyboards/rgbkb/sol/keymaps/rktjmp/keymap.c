@@ -154,6 +154,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         // mark that we should re-toggle _GQW on next press
         should_return_to_gqw = true;
         layer_off(_GQW);
+        // send enter
+        tap_code(KC_ENT);
       }
       else if (record->event.pressed && should_return_to_gqw) {
         should_return_to_gqw = false;
@@ -168,6 +170,13 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         layer_on(_GQW);
       }
       // send escape still
+      return true;
+    case KC_ENT_NAV:
+      if (record->event.pressed && should_return_to_gqw) {
+        should_return_to_gqw = false;
+        layer_on(_GQW);
+      }
+      // send enter still
       return true;
 //    case RGBRST:
 //#if defined(RGBLIGHT_ENABLE)
