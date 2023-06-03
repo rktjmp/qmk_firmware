@@ -21,12 +21,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #pragma once
 
 #define RGBLIGHT_LAYERS
-#define IGNORE_MOD_TAP_INTERRUPT
-
 // allow overriding rgb lights even when RGB_TOG is off
 #define RGBLIGHT_LAYERS_OVERRIDE_RGB_OFF
 
 #define PERMISSIVE_HOLD
+#define IGNORE_MOD_TAP_INTERRUPT
 #define RETRO_TAPPING
 
 #define MOUSEKEY_INTERVAL 16

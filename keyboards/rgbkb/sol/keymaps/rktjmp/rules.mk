@@ -7,14 +7,16 @@
 # To keep things clean and tidy, as well as make upgrades easier, only place overrides from the defaults in this file.
 
 #LED_MIRRORED = no
-#RGBLIGHT_ENABLE = no
+RGBLIGHT_ENABLE = yes
 #RGBLIGHT_ANIMATIONS = no
-#
+
 #RGB_MATRIX_ENABLE = yes
 #RGB_MATRIX_KEYPRESSES = yes
 
+# CONSOLE_ENABLE = yes
 MOUSEKEY_ENABLE = yes
 LTO_ENABLE = yes
+
 
 # Do not edit past here
 include keyboards/$(KEYBOARD)/post_rules.mk
